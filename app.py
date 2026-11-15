@@ -1,13 +1,16 @@
-
+import pandas as pd 
 import streamlit as st
 from main import generate_numbers, calculate_answer, check_answer
 import time
+from st_aggrid import AgGrid, GridOptionsBuilder
+
+
+
 st.set_page_config(page_title="MathQuest", layout="wide")
 
-
 # Initialize quiz memory
-if "results" not in st.session_state:
-    st.session_state.results = []
+if "list_results" not in st.session_state:
+    st.session_state.list_results = []
 
 if "quiz_started" not in st.session_state:
     st.session_state.quiz_started = False
@@ -57,10 +60,12 @@ def new_question():
     st.session_state.feedback = ""
 
 
+def clear_answer():
+    st.session_state.answer_input = ""
+
 # Process an answer and clear the input
 def submit_answer():
     user_answer = st.session_state.answer_input.strip()
-    st.session_state.answer_input = ""
 
     if st.session_state.answered:
         return
@@ -75,7 +80,8 @@ def submit_answer():
     st.session_state.list_results.append({
         "question": f"{st.session_state.num_1} "
                     f"{st.session_state.operation_code} "
-                    f"{st.session_state.num_2}",
+                    f"{st.session_state.num_2} =",
+                    
         "user_answer": answer,
         "correct_answer": st.session_state.correct_answer
         })
@@ -170,7 +176,7 @@ if st.session_state.quiz_started:
     st.subheader(
         f"What is {st.session_state.num_1} "
         f"{st.session_state.operation_code} "
-        f"{st.session_state.num_2}?"
+        f"{st.session_state.num_2} = ?"
     )
 
     # Enter submits the form
@@ -204,11 +210,11 @@ if st.session_state.quiz_started:
     # Move to the next question or finish
     if st.button(
         "Next Question"
-        if st.session_state.question_number
-        < st.session_state.total_questions
+        if st.session_state.question_number < st.session_state.total_questions
         else "Finish Quiz",
-        disabled=not st.session_state.answered
-    ):
+        disabled=not st.session_state.answered,
+        on_click=clear_answer
+    ): 
 
         if (
             st.session_state.question_number
@@ -248,6 +254,64 @@ if st.session_state.quiz_finished:
 
     minutes = int(elapsed_time // 60)
     seconds = elapsed_time % 60
+
+    st.subheader("Quiz Summary")
+    
+    # Create the DataFrame
+    df = pd.DataFrame(st.session_state.list_results)
+
+    # Rename columns
+    df = df.rename(columns={
+        "question": "Question",
+        "user_answer": "Your Answer",
+        "correct_answer": "Correct Answer"
+    })
+
+    # Add question numbers
+    df.insert(0, "No.", range(1, len(df) + 1))
+
+    # Add correct/incorrect result
+    df["Result"] = df.apply(
+        lambda row: "✅ Correct"
+        if row["Your Answer"] == row["Correct Answer"]
+        else "❌ Incorrect",
+        axis=1
+    )
+
+    # Arrange columns
+    df = df[["No.", "Question", "Correct Answer", "Your Answer", "Result"]]
+
+    gb = GridOptionsBuilder.from_dataframe(df)
+
+    
+    gb.configure_default_column(
+        cellStyle={"textAlign": "center"},
+        headerClass="center-header",
+        sortable=True,
+        filter=True,
+        resizable=True
+    )
+
+    grid_options = gb.build()
+
+    table_height = 45 + len(df) * 36
+
+    AgGrid(
+        df,
+        gridOptions=grid_options,
+        height=table_height,
+        fit_columns_on_grid_load=True,
+        custom_css={
+            ".ag-header-cell-label": {
+                "justify-content": "center !important",
+                "width": "100%"
+            },
+            ".ag-header-cell-text": {
+                "text-align": "center !important",
+                "width": "100%"
+            }
+        }
+    )
 
     if percentage >= 80:
         st.success("Great job!")
