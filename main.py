@@ -27,9 +27,12 @@ def check_answer(user_answer, correct_answer):
 def calculate_answer(num_1, num_2, operation):
     if operation == "+":
         return num_1 + num_2
+    elif operation == "-":
+        return num_1 - num_2
+    elif operation == "/":
+        return num_1 // num_2
     else:
         return num_1 * num_2
-
 
 # main code
 
@@ -44,15 +47,18 @@ def main():
 
 
     # ask if the user wants to answer addition or multiplication questions
-    operation = input("Do you want to do addition or multiplication questions? \n1: addition; \n2: multiplication\n\n")
-    while operation != "1" and operation != "2":
-        print("\nInvalid input. Please enter 1 or 2.\n")
-        operation = input("Do you want to do addition or multiplication questions? \n1: addition; \n2: multiplication\n\n")
+    operation = input("Do you want to do addition or multiplication questions? \n1: addition; \n2: multiplication\n3: subtraction\n4: division\n")
+    while operation != "1" and operation != "2" and operation != "3" and operation != "4":
+        print("\nInvalid input. Please enter 1, 2, 3, or 4.\n")
+        operation = input("Do you want to do addition or multiplication questions? \n1: addition; \n2: multiplication\n3: subtraction\n4: division\n")
     if operation == "1":
         operation = "+"
-    else:
+    elif operation == "2":
         operation = "x"
-
+    elif operation == "3":
+        operation = "-"
+    else:
+        operation = "/"
 
     # ask the user how hard the questions will be, 1 for easy, 2 for medium.
     difficulty = input("\nHow hard do you want the questions to be? \n1: easy; \n2: medium\n\n")
