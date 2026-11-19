@@ -22,7 +22,7 @@ TOPICS = {
         "Geometry", "Triangles, area, Pythagorean theorem", "category"
     ),
     "algebra": Topic("Algebra", "Equations, exponents, square roots", "functions"),
-    "ssat": Topic("SSAT Practice", "Middle and Upper Level", "school"),
+    "ssat": Topic("Exam Practice", "Middle and Upper Level", "school"),
 }
 
 
