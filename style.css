@@ -1,0 +1,67 @@
+.block-container {
+    max-width: 72rem;
+    padding: 3.25rem 1.25rem 2rem;
+}
+
+.st-key-home [data-testid="stVerticalBlockBorderWrapper"] {
+    min-width: 0;
+}
+
+.st-key-home [data-testid="stCaptionContainer"] p {
+    font-size: 0.975rem;
+}
+
+.st-key-home h1 {
+    font-size: clamp(2.45rem, 5vw, 3.5rem);
+    letter-spacing: -0.05em;
+    padding-bottom: 0;
+}
+
+.st-key-prompt {
+    background: #f4f4f5;
+    border-radius: 1.15rem;
+    padding: clamp(1rem, 3vw, 1.6rem);
+}
+
+.st-key-prompt h2 {
+    font-size: clamp(1.55rem, 3.7vw, 2.35rem);
+    letter-spacing: -0.035em;
+    padding: 0;
+}
+
+.st-key-home [class*="st-key-card_"] {
+    min-height: 12.75rem;
+}
+
+.st-key-home h3 {
+    font-size: 1.35rem;
+    padding: 0;
+}
+
+.st-key-home [data-testid="stIconMaterial"] {
+    color: #525c68;
+    font-size: 1.5rem;
+}
+
+[data-testid="InputInstructions"] {
+    display: none;
+}
+
+@media (max-width: 620px) {
+    .block-container {
+        padding: 3rem 0.75rem 1.5rem;
+    }
+
+    .st-key-home [data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap;
+    }
+
+    .st-key-home [data-testid="stColumn"] {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    .st-key-home [class*="st-key-card_"] {
+        min-height: 0;
+    }
+}
